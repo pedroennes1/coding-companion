@@ -1,0 +1,40 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Coding Companion</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+  <div class="container">
+
+    <div class="sprite-wrap">
+      <div class="halo"></div>
+      <img src="{{ url_for('static', filename='coding-companion.png') }}"
+           alt="Coding Companion"
+           class="sprite">
+    </div>
+
+    <h1>Coding Companion</h1>
+    <p class="subtitle">Paste code + error and I’ll explain what’s wrong and how to fix it.</p>
+
+    <div class="chat-card">
+      <div id="chat" class="chat">
+        <div class="bubble bot">
+          👋 Hey! I’m Coding Companion. Drop your code + the error message and I’ll debug it with you.
+        </div>
+      </div>
+
+      <form id="chatForm" class="composer">
+        <textarea id="query" name="query" placeholder="Ask me a coding question… (Enter to send, Shift+Enter for newline)" rows="3" required></textarea>
+        <button id="sendBtn" type="submit">Send</button>
+      </form>
+    </div>
+
+  </div>
+
+  <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>

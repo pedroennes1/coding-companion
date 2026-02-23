@@ -1,9 +1,11 @@
+console.log("app.js loaded ✅");
+
 const form = document.getElementById("chatForm");
 const input = document.getElementById("query");
 const chat = document.getElementById("chat");
 const sendBtn = document.getElementById("sendBtn");
 
-// ✅ Sprite element (make sure your <img> has id="sprite" in index.html)
+// ✅ Sprite element
 const sprite = document.getElementById("sprite");
 
 // ✅ Sprite filenames in /static/
@@ -11,12 +13,15 @@ const SPRITE_IDLE = "/static/coding-companion.png";
 const SPRITE_THINKING = "/static/thinking.png";
 const SPRITE_DONE = "/static/done.png";
 
-// Smooth sprite swap (works with your CSS opacity transition)
 function setSprite(src) {
-  if (!sprite) return;
+  if (!sprite) {
+    console.warn("No sprite element found.");
+    return;
+  }
   sprite.style.opacity = 0;
   setTimeout(() => {
-    sprite.src = src;
+    // cache-bust image swaps (helps Safari)
+    sprite.src = `${src}?v=${Date.now()}`;
     sprite.style.opacity = 1;
   }, 120);
 }
@@ -62,7 +67,7 @@ form.addEventListener("submit", async (e) => {
   input.value = "";
   sendBtn.disabled = true;
 
-  // 🧠 Start thinking sprite immediately when request begins
+  // 🧠 Thinking sprite at request start
   setSprite(SPRITE_THINKING);
 
   // typing bubble
@@ -77,26 +82,21 @@ form.addEventListener("submit", async (e) => {
     typing.remove();
     addBubble(reply, "bot");
 
-    // ✅ Switch to done once we have the answer
+    // ✅ Done sprite when response arrives
     setSprite(SPRITE_DONE);
 
-    // 🔁 Return to idle after 2 seconds
-    setTimeout(() => {
-      setSprite(SPRITE_IDLE);
-    }, 2000);
-
+    // 🔁 Back to idle after 2 seconds
+    setTimeout(() => setSprite(SPRITE_IDLE), 2000);
   } catch (err) {
+    console.error(err);
     typing.remove();
     addBubble("⚠️ I hit an error calling the API. Check your Flask terminal output.", "bot");
-
-    // On error, return to idle
     setSprite(SPRITE_IDLE);
-
   } finally {
     sendBtn.disabled = false;
     input.focus();
   }
 });
 
-// Ensure idle sprite on initial load
+// On initial load
 setSprite(SPRITE_IDLE);

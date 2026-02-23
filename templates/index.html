@@ -38,36 +38,8 @@
 
   </div>
 
+  <!-- ✅ Keep ONLY this. Sprite logic is in static/app.js now -->
   <script src="{{ url_for('static', filename='app.js') }}"></script>
-
-  <!-- ✅ SPRITE SWITCHING (NO /static/images folder needed) -->
-  <script>
-    const sprite = document.getElementById("sprite");
-    const form = document.getElementById("chatForm");
-    const chat = document.getElementById("chat");
-
-    function setSprite(filename) {
-      // small fade so it looks clean
-      sprite.style.opacity = 0;
-      setTimeout(() => {
-        sprite.src = `/static/${filename}`;
-        sprite.style.opacity = 1;
-      }, 120);
-    }
-
-    // When user submits -> thinking
-    form.addEventListener("submit", () => {
-      setSprite("thinking.png");
-    });
-
-    // When a new bot bubble gets added -> done, then back to idle
-    const observer = new MutationObserver(() => {
-      setSprite("done.png");
-      setTimeout(() => setSprite("coding-companion.png"), 2000);
-    });
-
-    observer.observe(chat, { childList: true, subtree: true });
-  </script>
 
 </body>
 </html>

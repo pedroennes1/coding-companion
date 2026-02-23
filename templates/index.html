@@ -12,9 +12,12 @@
 
     <div class="sprite-wrap">
       <div class="halo"></div>
-      <img src="{{ url_for('static', filename='coding-companion.png') }}"
-           alt="Coding Companion"
-           class="sprite">
+      <img 
+        id="sprite"
+        src="{{ url_for('static', filename='images/idle.png') }}"
+        alt="Coding Companion"
+        class="sprite"
+      >
     </div>
 
     <h1>Coding Companion</h1>
@@ -28,7 +31,13 @@
       </div>
 
       <form id="chatForm" class="composer">
-        <textarea id="query" name="query" placeholder="Ask me a coding question… (Enter to send, Shift+Enter for newline)" rows="3" required></textarea>
+        <textarea 
+          id="query" 
+          name="query" 
+          placeholder="Ask me a coding question… (Enter to send, Shift+Enter for newline)" 
+          rows="3" 
+          required>
+        </textarea>
         <button id="sendBtn" type="submit">Send</button>
       </form>
     </div>
@@ -36,5 +45,40 @@
   </div>
 
   <script src="{{ url_for('static', filename='app.js') }}"></script>
+
+  <!-- 🔥 SPRITE STATE LOGIC -->
+  <script>
+    const sprite = document.getElementById("sprite");
+    const form = document.getElementById("chatForm");
+
+    function setSprite(state) {
+      sprite.style.opacity = 0;
+      setTimeout(() => {
+        sprite.src = `/static/images/${state}.png`;
+        sprite.style.opacity = 1;
+      }, 150);
+    }
+
+    form.addEventListener("submit", function() {
+      // 🧠 Switch to thinking state
+      setSprite("thinking");
+    });
+
+    // 🔥 Hook into fetch completion (watch DOM for new bot message)
+    const chat = document.getElementById("chat");
+
+    const observer = new MutationObserver(() => {
+      // When new message appears from bot → done state
+      setSprite("done");
+
+      // Reset to idle after 2 seconds
+      setTimeout(() => {
+        setSprite("idle");
+      }, 2000);
+    });
+
+    observer.observe(chat, { childList: true });
+  </script>
+
 </body>
 </html>
